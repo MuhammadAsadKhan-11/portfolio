@@ -1,3 +1,4 @@
+/* ══ BACKGROUND CANVAS ══ */
 (function () {
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
@@ -135,8 +136,12 @@
     requestAnimationFrame(frame);
 })();
 
-/* ══ SCROLL UTILITY ══ */
-function scrollTo(id) {
+/* ══ SCROLL UTILITY ══
+   FIX #2: Renamed from scrollTo → scrollToSection to avoid overriding
+   the native browser window.scrollTo(x, y) function, which caused
+   broken/inconsistent scroll behaviour across browsers.
+*/
+function scrollToSection(id) {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
@@ -202,9 +207,8 @@ document.getElementById('skillsGrid').innerHTML = skillsData.map(s => `
 /* ══════════════════════════════════════════════════════════════════
    PROJECTS  ←  EDIT THIS SECTION WITH YOUR OWN PROJECTS
    ══════════════════════════════════════════════════════════════════
-
    For each project you can set:
-   ─ image   : path to a screenshot/thumbnail  e.g. "images/proj1.png"
+   ─ image   : path to a screenshot  e.g. "images/proj1.png"
                OR leave empty ("") to use the emoji fallback
    ─ emoji   : shown when no image is provided
    ─ bg      : gradient shown when no image is provided
@@ -216,14 +220,14 @@ document.getElementById('skillsGrid').innerHTML = skillsData.map(s => `
    ══════════════════════════════════════════════════════════════════ */
 const projData = [
     {
-        image: '',                                      // e.g. "images/rag-system.png"
+        image: '',
         emoji: '🤖',
         bg: 'linear-gradient(135deg,#1a1040,#2d1260)',
         title: 'AI-Powered RAG System',
         desc: 'Built an enterprise RAG system using LangChain and vector databases for intelligent document retrieval and question answering.',
         tags: ['Python', 'LangChain', 'Pinecone', 'OpenAI', 'FastAPI'],
-        liveUrl: '#',                                   // ← replace with your live URL
-        codeUrl: '#',                                   // ← replace with your GitHub repo URL
+        liveUrl: '#',
+        codeUrl: '#',
     },
     {
         image: '',
@@ -305,9 +309,28 @@ document.getElementById('projGrid').innerHTML = projData.map(p => {
 
 /* ══ EXPERIENCE ══ */
 const expData = [
-    { period: '2026 - Present', role: 'AI/ML intern', company: 'decodeslab', bullets: ['Led development of enterprise RAG systems serving 100K+ users', 'Architected multi-agent AI systems reducing processing time by 60%', 'Implemented MLOps pipelines on GCP with 99.9% uptime'], align: 'right' },
-    { period: '2025 - 2026', role: 'ML Engineer', company: 'Bixforge solutions', bullets: ['Built production ML models improving prediction accuracy by 35%', 'Developed real-time inference APIs handling 10M+ requests/day', 'Mentored junior engineers on ML best practices and system design'], align: 'left' },
-    // { period: '2019 - 2021', role: 'AI Research Engineer', company: 'NeuralLab', bullets: ['Published 3 papers on transformer architectures and attention mechanisms', 'Built early RAG prototypes contributing to open-source tooling (8K+ stars)', 'Developed NLP pipelines for document classification at enterprise scale'], align: 'right' },
+    {
+        period: '2026 - Present',
+        role: 'AI/ML Intern',
+        company: 'decodeslab',
+        bullets: [
+            'Led development of enterprise RAG systems serving 100K+ users',
+            'Architected multi-agent AI systems reducing processing time by 60%',
+            'Implemented MLOps pipelines on GCP with 99.9% uptime'
+        ],
+        align: 'right'
+    },
+    {
+        period: '2025 - 2026',
+        role: 'ML Engineer',
+        company: 'Bixforge Solutions',
+        bullets: [
+            'Built production ML models improving prediction accuracy by 35%',
+            'Developed real-time inference APIs handling 10M+ requests/day',
+            'Mentored junior engineers on ML best practices and system design'
+        ],
+        align: 'left'
+    },
 ];
 
 const expWrap = document.getElementById('expWrap');
@@ -373,27 +396,33 @@ setInterval(() => {
     renderTesti(testiIdx);
 }, 5000);
 
-/* ══ CONTACT FORM — EmailJS ══ */
+/* ══ CONTACT FORM — EmailJS ══
+   FIX #3: EmailJS placeholders clearly marked — replace before deploying.
+
+   SETUP STEPS:
+   1. Go to https://www.emailjs.com/ and sign up (free)
+   2. Add Gmail as an Email Service → copy the Service ID
+   3. Create an Email Template → copy the Template ID
+   4. Create an Auto-Reply Template → copy its Template ID
+   5. Go to Account → copy your Public Key
+   6. Replace the four placeholder strings below with your real values
+*/
 (function loadEmailJS() {
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
     script.onload = () => {
-        // STEP 1: Go to https://www.emailjs.com/ → sign up free
-        // STEP 2: Add Gmail as Email Service → copy Service ID
-        // STEP 3: Create Email Template → copy Template ID
-        // STEP 4: Account → copy Public Key
-        emailjs.init('YOUR_PUBLIC_KEY'); // ← Replace
+        emailjs.init('YOUR_PUBLIC_KEY'); // ← Step 4: replace with your Public Key
     };
     document.head.appendChild(script);
 })();
 
 document.querySelector('.cf-submit').addEventListener('click', async function () {
-    const nameEl = document.querySelector('.cf-input[placeholder="Your name"]');
+    const nameEl  = document.querySelector('.cf-input[placeholder="Your name"]');
     const emailEl = document.querySelector('.cf-input[type="email"]');
-    const msgEl = document.querySelector('.cf-textarea');
+    const msgEl   = document.querySelector('.cf-textarea');
 
-    const name = nameEl.value.trim();
-    const email = emailEl.value.trim();
+    const name    = nameEl.value.trim();
+    const email   = emailEl.value.trim();
     const message = msgEl.value.trim();
 
     if (!name || !email || !message) {
@@ -411,31 +440,31 @@ document.querySelector('.cf-submit').addEventListener('click', async function ()
 
     try {
         await emailjs.send(
-            'YOUR_SERVICE_ID',
-            'YOUR_TEMPLATE_ID',
+            'YOUR_SERVICE_ID',           // ← Step 2: replace with your Service ID
+            'YOUR_TEMPLATE_ID',          // ← Step 3: replace with your Template ID
             {
-                from_name: name,
+                from_name:  name,
                 from_email: email,
-                message: message,
-                to_email: 'asadkhans2310861@gmail.com',
-                reply_to: email,
+                message:    message,
+                to_email:   'asadkhans2310861@gmail.com',
+                reply_to:   email,
             }
         );
 
         await emailjs.send(
-            'YOUR_SERVICE_ID',
-            'YOUR_AUTOREPLY_TEMPLATE_ID',
+            'YOUR_SERVICE_ID',           // ← same Service ID
+            'YOUR_AUTOREPLY_TEMPLATE_ID',// ← Step 3b: replace with your Auto-Reply Template ID
             {
-                to_name: name,
-                to_email: email,
+                to_name:   name,
+                to_email:  email,
                 from_name: 'Muhammad Asad Khan',
             }
         );
 
-        showToast('Message sent! I\'ll get back to you soon.', 'success');
-        nameEl.value = '';
+        showToast("Message sent! I'll get back to you soon.", 'success');
+        nameEl.value  = '';
         emailEl.value = '';
-        msgEl.value = '';
+        msgEl.value   = '';
     } catch (err) {
         console.error(err);
         showToast('Something went wrong. Please email me directly.', 'error');
@@ -455,7 +484,9 @@ function showToast(msg, type) {
     toast.style.cssText = `
         position: fixed; bottom: 32px; right: 32px; z-index: 9999;
         padding: 14px 22px; border-radius: 10px; font-size: 14px; font-weight: 500;
-        background: ${type === 'success' ? 'linear-gradient(135deg,#10b981,#3b82f6)' : 'linear-gradient(135deg,#ef4444,#a855f7)'};
+        background: ${type === 'success'
+            ? 'linear-gradient(135deg,#10b981,#3b82f6)'
+            : 'linear-gradient(135deg,#ef4444,#a855f7)'};
         color: #fff; box-shadow: 0 8px 24px rgba(0,0,0,.4);
         animation: fadeInUp .3s ease; pointer-events: none;
     `;

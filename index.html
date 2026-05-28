@@ -8,6 +8,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap"
         rel="stylesheet" />
+    <!-- FIX #1: was "style.css" — filename on disk is "style.css" (all lowercase). Must match exactly on Linux/Vercel. -->
     <link rel="stylesheet" href="style.css">
     <style>
         @keyframes fadeInUp {
@@ -15,11 +16,11 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* ── YOUR PHOTO ── */
         .about-photo-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: top center;
             border-radius: inherit;
             display: block;
         }
@@ -53,8 +54,9 @@
             <div class="hero-role">AI/ML Engineer &amp; Developer</div>
             <p class="hero-desc">Building intelligent systems with LLMs, RAG, and multi-agent architectures</p>
             <div class="hero-btns">
-                <button class="btn-grad" onclick="scrollTo('projects')">View Work</button>
-                <button class="btn-outline" onclick="scrollTo('contact')">Contact Me</button>
+                <!-- FIX #2: renamed scrollTo → scrollToSection to avoid conflict with native window.scrollTo() -->
+                <button class="btn-grad" onclick="scrollToSection('projects')">View Work</button>
+                <button class="btn-outline" onclick="scrollToSection('contact')">Contact Me</button>
             </div>
         </div>
         <div class="scroll-down">
@@ -71,19 +73,12 @@
         <div class="about-wrap reveal">
             <div class="about-photo">
                 <!--
-                ╔══════════════════════════════════════════════════╗
-                ║  YOUR PHOTO — HOW TO ADD IT                      ║
-                ║  1. Save your photo as "photo.jpg" in the same   ║
-                ║     folder as this index.html file               ║
-                ║  2. Replace the emoji placeholder below with:    ║
-                ║     <img src="photo.jpg"                         ║
-                ║          alt="Muhammad Asad Khan"                ║
-                ║          class="about-photo-img" />              ║
-                ╚══════════════════════════════════════════════════╝
+                HOW TO ADD YOUR PHOTO:
+                1. Save your photo as "photo.jpg" in the same folder as index.html
+                2. Delete the placeholder div below and uncomment the <img> tag
                 -->
-                <div class="about-photo-placeholder">👨‍💻</div>
-                <!-- UNCOMMENT LINE BELOW AND DELETE LINE ABOVE ONCE PHOTO IS READY -->
-                <!-- <img src="photo.jpg" alt="Muhammad Asad Khan" class="about-photo-img" /> -->
+                <!-- <div class="about-photo-placeholder">👨‍💻</div> -->
+                <img src="photo.jpg" alt="Muhammad Asad Khan" class="about-photo-img" />
             </div>
             <div class="about-text">
                 <h2>About Me</h2>
@@ -264,17 +259,18 @@
             </div>
             <div class="footer-col">
                 <h4>Quick Links</h4>
-                <a onclick="scrollTo('home')">Home</a>
-                <a onclick="scrollTo('about')">About</a>
-                <a onclick="scrollTo('skills')">Skills</a>
-                <a onclick="scrollTo('projects')">Projects</a>
-                <a onclick="scrollTo('experience')">Experience</a>
-                <a onclick="scrollTo('contact')">Contact</a>
+                <!-- FIX #2 applied here too: all onclick scrollTo → scrollToSection -->
+                <a onclick="scrollToSection('home')">Home</a>
+                <a onclick="scrollToSection('about')">About</a>
+                <a onclick="scrollToSection('skills')">Skills</a>
+                <a onclick="scrollToSection('projects')">Projects</a>
+                <a onclick="scrollToSection('experience')">Experience</a>
+                <a onclick="scrollToSection('contact')">Contact</a>
             </div>
             <div class="footer-col footer-connect">
                 <h4>Let's Connect</h4>
                 <p>Available for freelance projects and collaborations.</p>
-                <a class="footer-get-touch" onclick="scrollTo('contact')">Get in Touch</a>
+                <a class="footer-get-touch" onclick="scrollToSection('contact')">Get in Touch</a>
             </div>
         </div>
         <div class="footer-bottom">
